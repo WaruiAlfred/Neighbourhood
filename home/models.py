@@ -45,7 +45,7 @@ class Profile(models.Model):
   neighborhood = models.ForeignKey(Neighbourhood,on_delete=models.CASCADE)
   phone_number = models.CharField(max_length=10)
   public_email = models.EmailField()
-  picture = CloudinaryField('profile')
+  picture = CloudinaryField('profile',blank=True,null=True)
   
   def save_profile(self): 
     '''Funtion to save a profile object'''
