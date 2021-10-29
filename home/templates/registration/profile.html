@@ -1,0 +1,70 @@
+{% extends 'base.html' %} {% load bootstrap5 %} {% load static %} {% load crispy_forms_tags %}
+
+{% block content %}
+  <div class="container">
+    <div class="">
+      <div class="row p-2">
+        <div class="col-md-2"></div>
+        <div class="col-md-4 profile-img">
+          {% if profile.picture %}
+            <img src="{{profile.picture.url}}" alt="" width="300" height="300" class="rounded-circle">
+          {% else %}
+            <img src="{% static 'images/profile_pic.svg' %}" alt="" width="300" height="300" class="rounded-circle">
+          {% endif %}
+          
+          <h3 class="text-center"><b>{{user.username}}</b></h3>
+        </div>
+        <div class="col-md-4 ">
+          <div class="card p-2">
+            <p><b>Neighbourhood:</b>{{profile.neighborhood.name}}</p>
+            <hr>
+            <p><b>Phone number:</b>{{profile.phone_number}}</p>
+            <hr>
+            <p><b>Email:</b>{{profile.public_email}}</p>
+            <hr>
+            <p><b>Bio:</b>{{profile.bio}}</p>
+            <hr>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              Update Profile
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Profile Update</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <form method="POST" enctype="multipart/form-data" style="height:100%;">
+                      {% csrf_token %}
+                      <fieldset class="form-group">
+                        <legend class="mb-4 text-center" style="text-decoration:underline;">Update Profile</legend>
+                        {{ u_form | crispy }}
+                        {{ p_form | crispy }}
+                        <br>
+                        <h3 class="text-center">Neighbourhood section</h3>
+                        {{ n_form | crispy }}
+                      </fieldset>
+                      <div class="form-group mt-2">
+                      <button class="btn btn-outline-info" type="submit" style="width:300px;">Update</button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-2"></div>
+      </div>
+      <!--My Neighbourhood-->
+      <div class="text-center">
+        <p>Name:{{neighbourhood.name}}</p>
+        <p>Location:{{neighbourhood.location}}</p>
+        <p>Population:{{neighbourhood.population}}</p>
+      </div>
+    </div>
+  </div>
+{% endblock content %}
