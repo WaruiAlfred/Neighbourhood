@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'home',
     'bootstrap5',
     'cloudinary',
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [
