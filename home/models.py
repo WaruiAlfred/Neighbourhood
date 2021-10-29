@@ -61,6 +61,7 @@ class Business(models.Model):
   neighborhood = models.ForeignKey(Neighbourhood,on_delete=models.CASCADE)
   phone_number = models.CharField(max_length=10)
   email = models.EmailField()
+  description = models.TextField(max_length=1000,blank=True)
   
   def __str__(self):
     return self.name
