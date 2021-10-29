@@ -20,6 +20,19 @@
     
   </head>
   <body>
+    <!--Navbar-->
+    {% include 'navbar.html' %}
+
+    <!--Flash messages-->
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-{{message.tags}}">
+          {{message}}
+        </div>
+      {% endfor %}
+    {% endif %}
+
+    <!--Content section-->
     {% block content %}{% endblock content %}
     
     {% block scripts %}

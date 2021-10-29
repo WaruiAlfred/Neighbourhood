@@ -3,7 +3,11 @@
 {% load bootstrap5 %}
 
 {% block content %}
-  <div class="container">
-    <h1 class="text-center">Neighbourhood</h1>
+  <div class="container-fluid">
+    <div class="index" style="background-image: url({% static 'images/neighbourhood.jpg' %});">
+      <div class="access-buttons">
+        <button type="button" class="btn btn-outline-warning access-button"><a href="{% url 'create_business' %}" style="text-decoration:none;">Businesses</a></button>
+      </div>
+    </div>
   </div>
 {% endblock content %}
