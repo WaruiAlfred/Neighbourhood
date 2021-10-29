@@ -5,7 +5,7 @@ from django.http import Http404
 from django.contrib import messages
 
 from .models import Profile,Neighbourhood
-from .forms import UserUpdateForm,ProfileUpdateForm,NeighbourhoodUpdateForm
+from .forms import UserUpdateForm,ProfileUpdateForm,NeighbourhoodUpdateForm,BusinessForm
 
 # Create your views here.
 def home(request): 
@@ -55,3 +55,19 @@ def profile(request,user_id):
   }
 
   return render(request,'registration/profile.html',context)
+
+def create_business(request): 
+  '''Function to create a new business'''
+  neighbourhood = Neighbourhood.objects.get(user=request.user)
+  
+  if request.method == 'POST': 
+    form = BusinessForm()
+    if form.is_valid(): 
+      business = form.save(commit=False)
+      business.user = request.user 
+      business.neighborhood = neighbourhood
+      business.save()
+    return redirect('businesses')
+  else:
+    form = BusinessForm() 
+  return render(request,'businesses/new_business.html',{"form":form})
