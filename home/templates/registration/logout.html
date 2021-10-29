@@ -1,0 +1,13 @@
+{% extends 'registration/base.html' %} {% load bootstrap5 %} {% load static %}
+
+{% block content %}
+  <div class="container">
+    <div class="card m-5 p-5 text-center" style="background:none;">
+      <h3 class="">You have been logged out</h3>
+      <p class="">Thank you for using our site<i style="font-size:20px;" class="fa fa-handshake-o ms-2" aria-hidden="true"></i></p>
+      <div class="">
+        <small class="text-muted"><a href="/accounts/login/" class="ms-2 text-white">Login again</a></small>
+      </div>
+    </div>
+  </div>
+{% endblock content %}
