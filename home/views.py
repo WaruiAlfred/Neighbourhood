@@ -4,7 +4,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
 from django.contrib import messages
 
-from .models import Profile,Neighbourhood
+from .models import Profile,Neighbourhood,Business
 from .forms import UserUpdateForm,ProfileUpdateForm,NeighbourhoodUpdateForm,BusinessForm
 
 # Create your views here.
@@ -61,13 +61,33 @@ def create_business(request):
   neighbourhood = Neighbourhood.objects.get(user=request.user)
   
   if request.method == 'POST': 
-    form = BusinessForm()
+    form = BusinessForm(request.POST,request.FILES)
     if form.is_valid(): 
       business = form.save(commit=False)
       business.user = request.user 
       business.neighborhood = neighbourhood
-      business.save()
+      business.save_business()
     return redirect('businesses')
   else:
     form = BusinessForm() 
   return render(request,'businesses/new_business.html',{"form":form})
+
+def businesses(request): 
+  '''Function to display all business in logged in user's neighbourhood'''
+  user_neighborhood = Neighbourhood.objects.filter(user=request.user).first()
+  businesses = Business.objects.all().filter(neighborhood=user_neighborhood.id)
+  print(businesses)
+  return render(request,'businesses/business.html',{"businesses":businesses,"neighborhood":user_neighborhood})
+
+def search_business(request): 
+  '''Function to search for a business'''
+  if 'business' in request.GET and request.GET['business']: 
+    search_term = request.GET.get('business')
+    businesses = Business.find_business(search_term)
+    print(businesses)
+    return render(request,'businesses/found_businesses.html',{"businesses":businesses})
+  else: 
+    message="You have to type in a business name"
+    
+  return render(request,'businesses/found_businesses.html',{"message":message})
+    
