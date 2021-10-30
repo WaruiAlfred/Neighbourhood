@@ -1,0 +1,69 @@
+{% extends 'base.html' %} {% load static %} {% load bootstrap5 %}
+
+{% block content %}
+  <div class="container">
+    <h1 class="text-center">Businesses in <b>{{neighborhood.name}}</b></h1>
+    <!--Search form-->
+    <div class="search-form">
+      <form action="{% url 'search_business' %}" method="GET">
+        {% csrf_token %}
+        <div class="form-group d-flex">
+          <input type="text" placeholder="business name" class="form-control" name="business">
+          <input type="submit" value="Search" class="btn btn-success ms-1">
+        </div>
+      </form>
+    </div>
+
+    <button type="button" class="btn btn-outline-primary access-button"><a href="{% url 'create_business' %}" style="text-decoration:none;">Register Business</a></button>
+    <div class="d-flex flex-row">
+      {% for business in businesses %}
+        <div class="m-2">
+          <div class="card">
+            {% if business.image %}
+              <img src="{{business.image.url}}" alt="" width="100%">
+            {% else %}
+              <img src="{% static 'images/business.png' %}" alt="" width="100%" >
+            {% endif %}
+            <p>Name:{{business.name}}</p>
+            <!--<p>Owner:{{business.user.username}}</p>
+            <p>Contact:{{business.phone_number}}</p>
+            <p>Email:{{business.email}}</p>-->
+            <p>Description:{{business.description | truncatechars:9}}</p>
+            <!--Business details-->
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              View business details
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">{{business.name}}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    {% if business.image %}
+                      <img src="{{business.image.url}}" alt="" width="100%">
+                    {% else %}
+                      <img src="{% static 'images/business.png' %}" alt="" width="100%" >
+                    {% endif %}
+
+                    <p>Owner:{{business.user.username}}</p>
+                    <p>Contact:{{business.phone_number}}</p>
+                    <p>Email:{{business.email}}</p>
+                    <p>Description:{{business.description}}</p>
+                  </div>
+                  <!--<div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                  </div>-->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock content %}
