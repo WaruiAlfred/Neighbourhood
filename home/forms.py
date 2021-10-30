@@ -18,10 +18,10 @@ class ProfileUpdateForm(forms.ModelForm):
 class NeighbourhoodUpdateForm(forms.ModelForm): 
   class Meta: 
     model = Neighbourhood
-    fields = ['name','location','population']
+    fields = ['name','location','population','police_contact','health_contact']
     
 #Businesses form
 class BusinessForm(forms.ModelForm): 
   class Meta: 
     model = Business
-    fields = ['name','phone_number','email','description']
+    fields = ['name','phone_number','email','description','image']

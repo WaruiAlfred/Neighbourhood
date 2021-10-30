@@ -8,6 +8,8 @@ class  Neighbourhood(models.Model):
   name = models.CharField(max_length=100)
   location = models.CharField(max_length=100)
   population = models.IntegerField()
+  police_contact = models.CharField(max_length=10,blank=True)
+  health_contact = models.CharField(max_length=10,blank=True)
   
   def __str__(self):
     return self.name
@@ -62,6 +64,7 @@ class Business(models.Model):
   phone_number = models.CharField(max_length=10)
   email = models.EmailField()
   description = models.TextField(max_length=1000,blank=True)
+  image = CloudinaryField('image',blank=True,null=True)
   
   def __str__(self):
     return self.name
@@ -74,9 +77,9 @@ class Business(models.Model):
     '''Method to delete business object'''
     self.delete()
     
-  def find_business(business_id): 
+  def find_business(business_name): 
     '''Method to find business according to id'''
-    business = Business.objects.filter(id=business_id)
+    business = Business.objects.filter(name=business_name)
     if business: 
       return business
     
