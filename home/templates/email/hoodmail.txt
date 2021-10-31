@@ -1,0 +1,2 @@
+Hello {{name}}
+Welcome to My Neighbourhood.Know your neighbourhood well as well as update neighbours on matters arising.
