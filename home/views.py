@@ -1,9 +1,10 @@
-# from django.http.response import HttpResponseRedirect
+from django.http.response import HttpResponseRedirect
 from django.shortcuts import render,redirect
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404,JsonResponse
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 from .models import Profile,Neighbourhood,Business,Posts,HoodSubscribers
 from .forms import UserUpdateForm,ProfileUpdateForm,NeighbourhoodUpdateForm,BusinessForm,PostsForm,HoodSubscribersForm
@@ -13,40 +14,41 @@ from .email import send_welcome_email
 # Create your views here.
 def home(request): 
   '''Function rendering the homepage'''
-  form = HoodSubscribersForm()
-  # if request.method == 'POST': 
-  #   form = HoodSubscribersForm(request.POST)
-  #   if form.is_valid(): 
-  #     name = form.cleaned_data['your_name']
-  #     email = form.cleaned_data['email']
-  #     recipient = HoodSubscribers(name=name,email=email)
-  #     recipient.save()
-  #     send_welcome_email(name,email)
-  #     HttpResponseRedirect('home')
-  # else: 
-  #   form = HoodSubscribersForm()
+  # form = HoodSubscribersForm()
+  if request.method == 'POST': 
+    form = HoodSubscribersForm(request.POST)
+    if form.is_valid(): 
+      name = form.cleaned_data['your_name']
+      email = form.cleaned_data['email']
+      recipient = HoodSubscribers(name=name,email=email)
+      recipient.save()
+      send_welcome_email(name,email)
+      HttpResponseRedirect('home')
+  else: 
+    form = HoodSubscribersForm()
   return render(request,'index.html',{"emailForm":form})
 
-def welcomeMail(request): 
-  '''Function to send email to subscribers'''
-  name = request.POST.get('your_name')
-  email = request.POST.get('email')
-  
-  recipient = HoodSubscribers(name=name,email=email)
-  recipient.save()
-  send_welcome_email(name,email)
-  data = {'success':'You have been successfully registered.'}
-  return JsonResponse(data)
+def input_hood(request): 
+  '''Function that collects user's neighbourhood'''
+  if request.method == 'POST': 
+    form = NeighbourhoodUpdateForm(request.POST)
+    if form.is_valid(): 
+      hood = form.save(commit=False)
+      hood.user = request.user 
+      hood.save_neighborhood()
+      return redirect('/')
+  else: 
+    form = NeighbourhoodUpdateForm()
+  return render(request,'hood.html',{"form":form})
 
+@login_required(login_url="/accounts/login/")
 def profile(request,user_id): 
   '''Function rendering a logged in user's profile page'''
-  user = User.objects.get(id=user_id)
-  try:
-    profile = Profile.objects.get(user=user.id)
-    neighbourhood = Neighbourhood.objects.get(user=user.id)
-  except ObjectDoesNotExist: 
-    return Http404()
-  
+  f_user = User.objects.get(id=user_id)
+
+  profile = Profile.objects.filter(user=f_user.id).first()
+  neighbourhood = Neighbourhood.objects.filter(user=f_user.id).first()
+
   if request.method == 'POST': 
     u_form = UserUpdateForm(request.POST,instance=request.user)
     p_form = ProfileUpdateForm(request.POST,request.FILES,instance=profile)
@@ -66,7 +68,7 @@ def profile(request,user_id):
       user_profile.save()
       
       messages.success(request,'Your account has been updated!')
-      return redirect('profile',user_id=user.id)
+      return redirect('profile',user_id=f_user.id)
   else: 
     u_form = UserUpdateForm(instance=request.user)
     p_form = ProfileUpdateForm(instance=profile)
@@ -82,6 +84,7 @@ def profile(request,user_id):
 
   return render(request,'registration/profile.html',context)
 
+@login_required(login_url="/accounts/login/")
 def create_business(request): 
   '''Function to create a new business'''
   neighbourhood = Neighbourhood.objects.get(user=request.user)
@@ -98,6 +101,7 @@ def create_business(request):
     form = BusinessForm() 
   return render(request,'businesses/new_business.html',{"form":form})
 
+@login_required(login_url="/accounts/login/")
 def businesses(request): 
   '''Function to display all business in logged in user's neighbourhood'''
   user_neighborhood = Neighbourhood.objects.filter(user=request.user).first()
@@ -105,6 +109,7 @@ def businesses(request):
   print(businesses)
   return render(request,'businesses/business.html',{"businesses":businesses,"neighborhood":user_neighborhood})
 
+@login_required(login_url="/accounts/login/")
 def search_business(request): 
   '''Function to search for a business'''
   if 'business' in request.GET and request.GET['business']: 
@@ -117,7 +122,7 @@ def search_business(request):
     
   return render(request,'businesses/found_businesses.html',{"message":message})
     
-    
+@login_required(login_url="/accounts/login/")
 def create_post(request): 
   '''Function to create add new post'''
   neighbourhood = Neighbourhood.objects.get(user=request.user)
@@ -134,6 +139,7 @@ def create_post(request):
     form = PostsForm() 
   return render(request,'posts/new_post.html',{"form":form})
 
+@login_required(login_url="/accounts/login/")
 def posts(request): 
   '''Function to display all posts in logged in user's neighbourhood'''
   user_neighborhood = Neighbourhood.objects.filter(user=request.user).first()
@@ -141,6 +147,7 @@ def posts(request):
   print(businesses)
   return render(request,'posts/posts.html',{"posts":posts,"neighborhood":user_neighborhood})
 
+@login_required(login_url="/accounts/login/")
 def search_post(request): 
   '''Function to search for a post'''
   if 'post' in request.GET and request.GET['post']: 
