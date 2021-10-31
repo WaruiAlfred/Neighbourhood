@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import Profile,Neighbourhood,Business
+from .models import Profile,Neighbourhood,Business,Posts
     
 #User update form
 class UserUpdateForm(forms.ModelForm): 
@@ -25,3 +25,14 @@ class BusinessForm(forms.ModelForm):
   class Meta: 
     model = Business
     fields = ['name','phone_number','email','description','image']
+    
+#Posts form
+class PostsForm(forms.ModelForm): 
+  class Meta: 
+    model = Posts
+    fields = ['title','details']
+  
+#Subscribers form  
+class HoodSubscribersForm(forms.Form):
+    your_name = forms.CharField(label='First Name',max_length=30)
+    email = forms.EmailField(label='Email')

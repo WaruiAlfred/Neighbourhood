@@ -22,9 +22,9 @@ class  Neighbourhood(models.Model):
     '''Method to delete object instance'''
     self.delete()
     
-  def find_neighborhood(id): 
+  def find_neighborhood(name): 
     '''Method to find neighborhood object instance'''
-    neighborhood = Neighbourhood.objects.filter(id=id)
+    neighborhood = Neighbourhood.objects.filter(name=name)
     if neighborhood: 
       return neighborhood
     
@@ -106,3 +106,11 @@ class Posts(models.Model):
   def save_post(self): 
     '''Method to save post'''
     self.save()
+    
+#Subscribers
+class HoodSubscribers(models.Model): 
+  name = models.CharField(max_length=30)
+  email = models.EmailField()
+  
+  def __str__(self):
+    return self.name
