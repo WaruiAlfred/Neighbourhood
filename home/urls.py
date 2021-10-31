@@ -7,4 +7,8 @@ urlpatterns = [
   path('businesses/',views.businesses,name='businesses'),
   path('business/create/',views.create_business,name='create_business'),
   path('search/business/',views.search_business,name='search_business'),
+  path("posts/create",views.create_post, name='create_post'),
+  path('posts/',views.posts,name='posts'),
+  path('search/post/',views.search_post,name='search_post'),
+  path('ajax/hood/',views.welcomeMail,name='welcomeMail'),
 ]

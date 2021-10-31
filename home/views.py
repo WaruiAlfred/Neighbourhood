@@ -1,16 +1,42 @@
+# from django.http.response import HttpResponseRedirect
 from django.shortcuts import render,redirect
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import Http404
+from django.http import Http404,JsonResponse
 from django.contrib import messages
 
-from .models import Profile,Neighbourhood,Business
-from .forms import UserUpdateForm,ProfileUpdateForm,NeighbourhoodUpdateForm,BusinessForm
+from .models import Profile,Neighbourhood,Business,Posts,HoodSubscribers
+from .forms import UserUpdateForm,ProfileUpdateForm,NeighbourhoodUpdateForm,BusinessForm,PostsForm,HoodSubscribersForm
+
+from .email import send_welcome_email
 
 # Create your views here.
 def home(request): 
   '''Function rendering the homepage'''
-  return render(request,'index.html')
+  form = HoodSubscribersForm()
+  # if request.method == 'POST': 
+  #   form = HoodSubscribersForm(request.POST)
+  #   if form.is_valid(): 
+  #     name = form.cleaned_data['your_name']
+  #     email = form.cleaned_data['email']
+  #     recipient = HoodSubscribers(name=name,email=email)
+  #     recipient.save()
+  #     send_welcome_email(name,email)
+  #     HttpResponseRedirect('home')
+  # else: 
+  #   form = HoodSubscribersForm()
+  return render(request,'index.html',{"emailForm":form})
+
+def welcomeMail(request): 
+  '''Function to send email to subscribers'''
+  name = request.POST.get('your_name')
+  email = request.POST.get('email')
+  
+  recipient = HoodSubscribers(name=name,email=email)
+  recipient.save()
+  send_welcome_email(name,email)
+  data = {'success':'You have been successfully registered.'}
+  return JsonResponse(data)
 
 def profile(request,user_id): 
   '''Function rendering a logged in user's profile page'''
@@ -91,3 +117,38 @@ def search_business(request):
     
   return render(request,'businesses/found_businesses.html',{"message":message})
     
+    
+def create_post(request): 
+  '''Function to create add new post'''
+  neighbourhood = Neighbourhood.objects.get(user=request.user)
+  
+  if request.method == 'POST': 
+    form = PostsForm(request.POST)
+    if form.is_valid(): 
+      post = form.save(commit=False)
+      post.author = request.user 
+      post.neighborhood = neighbourhood
+      post.save_post()
+    return redirect('posts')
+  else:
+    form = PostsForm() 
+  return render(request,'posts/new_post.html',{"form":form})
+
+def posts(request): 
+  '''Function to display all posts in logged in user's neighbourhood'''
+  user_neighborhood = Neighbourhood.objects.filter(user=request.user).first()
+  posts = Posts.objects.all().filter(neighborhood=user_neighborhood.id)
+  print(businesses)
+  return render(request,'posts/posts.html',{"posts":posts,"neighborhood":user_neighborhood})
+
+def search_post(request): 
+  '''Function to search for a post'''
+  if 'post' in request.GET and request.GET['post']: 
+    search_term = request.GET.get('post')
+    posts = Posts.objects.filter(title=search_term)
+    print(posts)
+    return render(request,'posts/found_posts.html',{"posts":posts})
+  else: 
+    message="You have to type in a post title"
+    
+  return render(request,'posts/found_posts.html',{"message":message})
