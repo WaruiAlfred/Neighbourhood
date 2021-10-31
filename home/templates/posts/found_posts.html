@@ -1,0 +1,16 @@
+{% extends 'base.html' %} {% load static %} {% load bootstrap5 %}
+
+{% block content %}
+  <div class="container">
+    <h1>{{message}}</h1>
+    <div class="card p-3">
+      {% for post in posts %}
+          <h3>{{post.title}}</h3>
+          <p><b>Author:</b>{{post.author.username}}</p>
+          <p><b>Hood:</b>{{post.neighborhood.name}}</p>
+          <p><b>Details:</b>{{post.details}}</p>
+          <p><b>Posted on:</b>{{post.date_posted}}</p>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock content %}

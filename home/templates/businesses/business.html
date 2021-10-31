@@ -14,26 +14,23 @@
       </form>
     </div>
 
-    <button type="button" class="btn btn-outline-primary access-button"><a href="{% url 'create_business' %}" style="text-decoration:none;">Register Business</a></button>
-    <div class="d-flex flex-row">
+    <button type="button" class="btn btn-outline-primary business-button"><a href="{% url 'create_business' %}" style="text-decoration:none;">Register Business</a></button>
+    <div class="d-flex flex-row" style="flex-wrap:wrap;">
       {% for business in businesses %}
         <div class="m-2">
-          <div class="card">
+          <div class="card business-card">
             {% if business.image %}
               <img src="{{business.image.url}}" alt="" width="100%">
             {% else %}
               <img src="{% static 'images/business.png' %}" alt="" width="100%" >
             {% endif %}
             <p>Name:{{business.name}}</p>
-            <!--<p>Owner:{{business.user.username}}</p>
-            <p>Contact:{{business.phone_number}}</p>
-            <p>Email:{{business.email}}</p>-->
             <p>Description:{{business.description | truncatechars:9}}</p>
             <!--Business details-->
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
               View business details
             </button>
-
+          
             <!-- Modal -->
             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
               <div class="modal-dialog">
@@ -48,16 +45,12 @@
                     {% else %}
                       <img src="{% static 'images/business.png' %}" alt="" width="100%" >
                     {% endif %}
-
-                    <p>Owner:{{business.user.username}}</p>
-                    <p>Contact:{{business.phone_number}}</p>
-                    <p>Email:{{business.email}}</p>
-                    <p>Description:{{business.description}}</p>
+                    <hr>
+                    <p><b>Owner:</b>{{business.user.username}}</p>
+                    <p><b>Contact:</b>{{business.phone_number}}</p>
+                    <p><b>Email:</b>{{business.email}}</p>
+                    <p><b>Description:</b>{{business.description}}</p>
                   </div>
-                  <!--<div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                  </div>-->
                 </div>
               </div>
             </div>

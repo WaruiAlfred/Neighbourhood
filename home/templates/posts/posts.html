@@ -1,0 +1,51 @@
+{% extends 'base.html' %} {% load static %} {% load bootstrap5 %}
+
+{% block content %}
+  <div class="container">
+    <h1 class="text-center">Posts in <b>{{neighborhood.name}}</b></h1>
+    <!--Search form-->
+    <div class="search-form">
+      <form action="{% url 'search_post' %}" method="GET">
+        {% csrf_token %}
+        <div class="form-group d-flex">
+          <input type="text" placeholder="post name" class="form-control" name="post">
+          <input type="submit" value="Search" class="btn btn-success ms-1">
+        </div>
+      </form>
+    </div>
+
+    <button type="button" class="btn btn-outline-primary business-button"><a href="{% url 'create_post' %}" style="text-decoration:none;">Add Post</a></button>
+    <div class="d-flex flex-row" style="flex-wrap:wrap;">
+      {% for post in posts %}
+        <div class="m-2">
+          <div class="card p-2" style="width:300px;">
+            <h3>Title:{{post.title}}</h3>
+            <p>Description:{{post.details | truncatechars:9}}</p>
+            <!--Post details-->
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              View post details
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">{{post.title}}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <p><b>Author:</b>{{post.author.username}}</p>
+                    <p><b>Hood:</b>{{post.neighborhood.name}}</p>
+                    <p><b>Details:</b>{{post.details}}</p>
+                    <p><b>Date posted:</b>{{post.date_posted}}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock content %}

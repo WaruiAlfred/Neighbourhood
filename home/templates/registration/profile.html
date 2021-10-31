@@ -3,8 +3,7 @@
 {% block content %}
   <div class="container">
     <div class="">
-      <div class="row p-2">
-        <div class="col-md-2"></div>
+      <div class="row p-2 mt-5">
         <div class="col-md-4 profile-img">
           {% if profile.picture %}
             <img src="{{profile.picture.url}}" alt="" width="300" height="300" class="rounded-circle">
@@ -15,7 +14,7 @@
           <h3 class="text-center"><b>{{user.username}}</b></h3>
         </div>
         <div class="col-md-4 ">
-          <div class="card p-2">
+          <div class="card p-2 profile-card">
             <p><b>Neighbourhood:</b>{{profile.neighborhood.name}}</p>
             <hr>
             <p><b>Phone number:</b>{{profile.phone_number}}</p>
@@ -37,7 +36,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div class="modal-body">
-                    <form method="POST" enctype="multipart/form-data" style="height:100%;">
+                    <form method="POST" enctype="multipart/form-data" style="height:100%;" action="{% url 'profile' user.id %}">
                       {% csrf_token %}
                       <fieldset class="form-group">
                         <legend class="mb-4 text-center" style="text-decoration:underline;">Update Profile</legend>
@@ -48,7 +47,7 @@
                         {{ n_form | crispy }}
                       </fieldset>
                       <div class="form-group mt-2">
-                      <button class="btn btn-outline-info" type="submit" style="width:300px;">Update</button>
+                      <button class="btn btn-outline-info" type="submit" style="width:450px;">Update</button>
                       </div>
                     </form>
                   </div>
@@ -57,13 +56,22 @@
             </div>
           </div>
         </div>
-        <div class="col-md-2"></div>
-      </div>
-      <!--My Neighbourhood-->
-      <div class="text-center">
-        <p>Name:{{neighbourhood.name}}</p>
-        <p>Location:{{neighbourhood.location}}</p>
-        <p>Population:{{neighbourhood.population}}</p>
+        <!--Neighbourhood info-->
+        <div class="col-md-4 ">
+          <div class="card p-2 profile-card">
+            <h3 class="text-center" style="text-decoration:underline;">{{neighbourhood.name}}</h3>
+            <br>
+            <p><b>Location:</b>{{neighbourhood.location}}</p>
+            <hr>
+            <p><b>Population:</b>{{neighbourhood.population}} people</p>
+            <hr>
+            <p><b>Police:</b>{{neighbourhood.police_contact}}</p>
+            <hr>
+            <p><b>Health:</b>{{neighbourhood.health_contact}}</p>
+            
+          </div>
+        </div>
+      
       </div>
     </div>
   </div>

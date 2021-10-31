@@ -3,17 +3,19 @@
 {% block content %}
   <div class="container">
     <h1>{{message}}</h1>
-    {% for business in businesses %}
-      {% if business.image %}
-        <img src="{{business.image.url}}" alt="" width="100%">
-      {% else %}
-        <img src="{% static 'images/business.png' %}" alt="" width="100%" >
-      {% endif %}
-      <p>Name:{{business.name}}</p>
-      <p>Owner:{{business.user.username}}</p>
-      <p>Contact:{{business.phone_number}}</p>
-      <p>Email:{{business.email}}</p>
-      <p>Description:{{business.description }}</p>
-    {% endfor %}
+    <div class="card p-2">
+      {% for business in businesses %}
+        {% if business.image %}
+          <img src="{{business.image.url}}" alt="" width="100%">
+        {% else %}
+          <img src="{% static 'images/business.png' %}" alt="" width="100%" >
+        {% endif %}
+        <p>Name:{{business.name}}</p>
+        <p>Owner:{{business.user.username}}</p>
+        <p>Contact:{{business.phone_number}}</p>
+        <p>Email:{{business.email}}</p>
+        <p>Description:{{business.description }}</p>
+      {% endfor %}
+    </div>
   </div>
 {% endblock content %}

@@ -5,8 +5,46 @@
 {% block content %}
   <div class="container-fluid">
     <div class="index" style="background-image: url({% static 'images/neighbourhood.jpg' %});">
-      <div class="access-buttons">
-        <button type="button" class="btn btn-outline-warning access-button"><a href="{% url 'create_business' %}" style="text-decoration:none;">Businesses</a></button>
+      <div class="access-buttons ">
+
+        <!--Some text-->
+        <div class="intro-text">
+          <p>It high time that you stopped being a ghost in your neighbourhood.</p>
+          <p>Log in and find information about where you live.</p>
+        </div>
+
+        <!--Redirection buttons-->
+        <div class="buttons">
+          <button type="button" class="btn btn-outline-warning access-button"><a href="{% url 'businesses' %}" style="text-decoration:none;">Businesses</a></button>
+          <button type="button" class="btn btn-outline-success access-button"><a href="{% url 'posts' %}" style="text-decoration:none;">Posts</a></button>
+          <button type="button" class="btn btn-outline-primary access-button" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            Subscribe
+          </button>
+          <button type="button" class="btn btn-outline-secondary access-button"><a href="{% url 'hood' %}" style="text-decoration:none;">Neighbourhood</a></button>
+        </div>
+
+        <!--Subscription form-->
+        <div class="subscription-form">
+       
+          <!-- Modal -->
+          <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Subscription Form</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <form action="{% url 'home' %}" method="post">
+                    {% csrf_token %}
+                    {% bootstrap_form emailForm %}
+                    <button type="submit" class="btn btn-primary">Subscribe<i class="fa fa-envelope" aria-hidden="true"></i></button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
