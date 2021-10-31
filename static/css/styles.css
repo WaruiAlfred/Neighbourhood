@@ -1,3 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani&display=swap');
+
+/*navbar*/
+nav{
+  font-family: 'Rajdhani', sans-serif;
+}
+.navbar-brand{
+  font-family: 'Rajdhani', sans-serif;
+  font-style: italic;
+  font-weight: bold;
+  font-size: 50px;
+}
+
+/*profile*/
+.profile-card{
+  border-radius: 20px;
+  box-shadow: 10px 10px 5px #888888;
+}
 /*index.html*/
 .index{
   background-repeat: no-repeat;
@@ -12,12 +30,35 @@
   left: 0;
   right: 0;
   height: 100vh;
-  padding-left: 20%;
-  padding-top: 25%;
-  background-color: #808080;
-  opacity: 0.7;
+  padding-top: 16%;
+
+}
+.buttons{
+  margin-left: 26%;
 }
 .access-button{
   border-radius: 30px;
   border: 5px solid;
+  width: 160px;
+}
+.intro-text{
+  text-align: center;
+}
+
+/*business*/
+.business-button{
+  border-radius: 30px;
+  margin-top: 10px;
+  margin-left: 40%;
+}
+.business-card{
+  width: 350px;
+  height: 100%;
+  padding: 7px;
+}
+
+@media screen and (max-width:500px){
+  .buttons{
+    margin-left: 35px;
+  }
 }
